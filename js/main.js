@@ -94,11 +94,21 @@ const producto1 = new Producto(1,'remera',1500);
 const producto2 = new Producto(2,'pantalon',3000);
 const producto3 = new Producto(3,'zapatillas',2500);
 const producto4 = new Producto(4,'buzo',2000);
+const producto5 = new Producto(5,'medias',500);
+const producto6 = new Producto(6,'campera',6000);
+const producto7 = new Producto(7,'gorra',1000);
+const producto8 = new Producto(8,'guantes',2000);
+const producto9 = new Producto(9,'camisa',3000);
 
 cargar_producto(productos,producto1);
 cargar_producto(productos,producto2);
 cargar_producto(productos,producto3);
 cargar_producto(productos,producto4);
+cargar_producto(productos,producto5);
+cargar_producto(productos,producto6);
+cargar_producto(productos,producto7);
+cargar_producto(productos,producto8);
+cargar_producto(productos,producto9);
 
 // Buscar productos
 

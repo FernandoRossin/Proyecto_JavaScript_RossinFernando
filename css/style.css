@@ -7,13 +7,13 @@
    background-color: #ebebc7; }
 
 .header {
-    color: #70450c;
+    color: #a76d21;
     background-color: #e6c79f;
   }
     
 
 .titulo {
-  color: #70450c;
+  color:  #a76d21;
   font-size: 2rem;
   padding: 30px; }
 
@@ -24,13 +24,13 @@
 
 
 .carrito{
-  background-color: aqua;
+  background-color: rgb(136, 223, 223);
   border-radius: 10px;
 }
 
 .contenido{
   text-align: center;
   margin: 15px;
-  max-width: 250px;
+  max-width: 200px;
   background-color: beige;
  }
