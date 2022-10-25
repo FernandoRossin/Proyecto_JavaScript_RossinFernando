@@ -1,20 +1,4 @@
 
-// funcion mensaje de despedida
-
-function despedida(){
-
-    alert('Gracias por visitar nuestra página \n'+'   '+'    Te esperamos pronto!');
-
-}
-
-// función para buscar productos
-
-function filtrar_producto(arr,filtro){
-    const filtrado = arr.filter((el)=>{
-        return el.nombre.includes(filtro);
-    });
-        return filtrado;
-} 
 
 // función para crear productos
 
@@ -30,13 +14,79 @@ function cargar_producto(array,prod){
     array.push(prod)
 }
 
+// función para ver productos
+
+function ver_productos(){
+    for (const producto of bus) {
+        let div = document.createElement('div');
+        div.className = "col-12 col-md-6 col-xl-3 contenido";
+        div.innerHTML =  `
+            <h3 class="titulo1">Nombre del producto: ${producto.nombre}</h3>
+            <p class="titulo1">el precio es de: $ ${producto.precio}</p>
+            <button class="boton_compra btn btn-primary" onclick="comprar_producto('${producto.id}')">Comprar</button>
+            `
+        impri_prod.appendChild(div);  
+        }
+}
+
+// función para buscar productos
+
+function filtrar_producto(arr,filtro){
+    const filtrado = arr.filter((el)=>{
+        return el.nombre.includes(filtro);
+    });
+        return filtrado;
+} 
+
+// función para agregar productos al carrito
+
+function comprar_producto(id){
+    let producto = productos.find(p => p.id == id);
+    carrito.push(producto);
+    let carrito_storage = JSON.stringify(carrito)
+    localStorage.setItem('carrito',carrito_storage);
+    mostrar_carrito();
+} 
+
+// función para mostrar el carrito
+
+function mostrar_carrito(){
+    if(JSON.parse(localStorage.getItem('carrito')) == null){
+        impri_carr.innerHTML = `<p class="titulo text-center">El carrito está vacío.</p>`;        
+    }else{
+    carrito_storage = JSON.parse(localStorage.getItem('carrito'));
+    impri_carr.innerHTML = ``;
+    let total = 0;
+    for (const producto of carrito_storage) {
+        let li = document.createElement('li');
+            li.innerHTML = `
+            <h3 class="titulo1">Nombre del producto: ${producto.nombre}</h3>
+            <p class="titulo1">el precio es de: $ ${producto.precio}</p>
+            `
+        impri_carr.appendChild(li);
+        total = total + producto.precio;  
+        }
+    let p = document.createElement('p');
+    p.innerHTML = `<p class="titulo">Total: $ ${total}</p>`
+    impri_carr.appendChild(p);
+    }
+}
 
 
 // declaracion de variables
 
 const productos = [];
 
-const carrito = [];
+let carrito = [];
+
+if(JSON.parse(localStorage.getItem('carrito')) == null){
+    carrito = [];
+}else{
+    carrito = JSON.parse(localStorage.getItem('carrito'));
+}
+console.log(carrito);
+
+let bus = productos;
 
 let continuar = 's';
 
@@ -50,71 +100,26 @@ cargar_producto(productos,producto2);
 cargar_producto(productos,producto3);
 cargar_producto(productos,producto4);
 
+// Buscar productos
 
-let inicio_sesion = prompt('Bienvenido, desea ingresar a la tienda? \n SI- ingrese s \n NO- ingrese n')
+const boton_buscar = document.querySelector('#boton_buscar');
+const input = document.getElementById('buscar');
+const impri_prod = document.getElementById("impri_prod");
 
-if(inicio_sesion == 's'){
+// ver productos
 
-    do{    
-        let ingreso = prompt('Que operación desea realizar: \n 1-Búscar un producto \n 2-Compra un producto \n 3-Ver el carrito');
-        
-    // Opciones del menú: 
+boton_buscar.addEventListener('click',()=>{
+    impri_prod.innerHTML = ``
+    bus = filtrar_producto(productos,input.value.toLowerCase());
+    return ver_productos(bus)
+})
 
-        switch (ingreso) {
-            case '1':
-                let buscar = prompt('Ingrese el producto que desea buscar')
-                let bus = filtrar_producto(productos,buscar);
-                for (const prod of bus) {
-                    alert('Se encontró: ' + prod.nombre + '-> Precio: '+ prod.precio);
-                }
-                break;
-            case '2':
-                do{    
-                    let ingreso = prompt('Que producto desea adquirir: \n 1-Remera \n 2-Pantalón \n 3-Zapatillas \n 4-Buzo');
-                    let cant = parseInt(prompt('¿Cuantos desea comprar?'));
-                    switch (ingreso) {
-                        case '1':
-                            carrito.push({id: productos[0].id,nombre: productos[0].nombre, precio: productos[0].precio, cantidad: cant});
-                            break;
-                        case '2':
-                            carrito.push({id: productos[1].id,nombre: productos[1].nombre, precio: productos[1].precio, cantidad: cant});
-                            break;
-                        case '3':
-                            carrito.push({id: productos[2].id,nombre: productos[2].nombre, precio: productos[2].precio, cantidad: cant});
-                            break;
-                        case '4':
-                            carrito.push({id: productos[3].id,nombre: productos[3].nombre, precio: productos[3].precio, cantidad: cant});
-                            break;
-                        default:
-                            break; 
-                        }
-                    continuar = prompt('desea agregar otro producto? \n SI- ingrese s \n NO- ingrese n');
-                }while(continuar != 'n');
-                break;
-            case '3':
-                if (carrito.length > 0){                
-                for (const prod of carrito) {
-                    alert('El carrito contiene: ' + prod.nombre + '-> Cantidad: '+ prod.cantidad);
-                }
-                break;
-                }else{
-                    alert('El carrito se encuentra vacío')
-                }
-                break;
-            default:
-                break; 
-            }
-        continuar = prompt('desea realizar otra consulta? \n SI- ingrese s \n NO- ingrese n');
-    }while(continuar != 'n');
+
+ver_productos(bus);
+mostrar_carrito();
+
+
     
-    despedida();
-    
-}else if(inicio_sesion == 'n'){
-        despedida();
-        
-}else{
-        alert('opcion invalida');
-}
 
 
 

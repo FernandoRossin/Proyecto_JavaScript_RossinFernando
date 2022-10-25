@@ -1,0 +1,36 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box; }
+  
+.cuerpo {
+   background-color: #ebebc7; }
+
+.header {
+    color: #70450c;
+    background-color: #e6c79f;
+  }
+    
+
+.titulo {
+  color: #70450c;
+  font-size: 2rem;
+  padding: 30px; }
+
+.titulo1 {
+  color: #70450c;
+  font-size: 1rem;
+ }
+
+
+.carrito{
+  background-color: aqua;
+  border-radius: 10px;
+}
+
+.contenido{
+  text-align: center;
+  margin: 15px;
+  max-width: 250px;
+  background-color: beige;
+ }

@@ -4,14 +4,47 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/style.css" />    
     <title>Proyecto final</title>
 </head>
-<body>
-    <h1>Proyecto final - Rossin Fernando</h1>
+<body class="cuerpo">
+    <header class="header">
+        <h1 class="text-center">Proyecto final - Rossin Fernando</h1>
+    </header>
     <hr />
-    <h2>Entrega 2</h2>
+    <h2 class="titulo text-center">Entrega 3-Venta de indumentaria</h2>
+    <!-- buscar producto -->
+    <label class="titulo" for="buscar">Que producto desea buscar</label>
+    <input type="text" name="buscar" value="" id="buscar" />
+    <button class="btn btn-primary" id="boton_buscar">BUSCAR</button>
 
-    <script src="js/main.js"></script>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-10 dinamico">
+                <p class="titulo">Listado de productos:</p>
+                    <section class="container-fluid" >
+                        <div class="row" id="impri_prod">
+
+                        <!-- contenido dinámico productos -->
+                        
+                        </div> 
+                    </section>        
+            </div>
+            <div class="col-2 carrito">
+                <p class="titulo text-center">Carrito:</p>
+                <ul id="impri_carr">
+
+                <!-- contenido dinámico carrito-->
+
+                </ul>
+
+            </div>
+        </div>
+    </div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
+<script src="js/main.js"></script>
     
 </body>
 </html>
