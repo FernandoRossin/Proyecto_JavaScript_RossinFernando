@@ -1,34 +1,4 @@
 
-
-// función para crear productos
-
-function Producto(id,nombre,precio){
-    this.id = id;
-    this.nombre = nombre;
-    this.precio = precio;
-}
-
-// función para agregar producto nuevo
-
-function cargar_producto(array,prod){
-    array.push(prod)
-}
-
-// función para ver productos
-
-function ver_productos(){
-    for (const producto of bus) {
-        let div = document.createElement('div');
-        div.className = "col-12 col-md-6 col-xl-3 contenido";
-        div.innerHTML =  `
-            <h3 class="titulo1">Nombre del producto: ${producto.nombre}</h3>
-            <p class="titulo1">el precio es de: $ ${producto.precio}</p>
-            <button class="boton_compra btn btn-primary" onclick="comprar_producto('${producto.id}')">Comprar</button>
-            `
-        impri_prod.appendChild(div);  
-        }
-}
-
 // función para buscar productos
 
 function filtrar_producto(arr,filtro){
@@ -38,100 +8,196 @@ function filtrar_producto(arr,filtro){
         return filtrado;
 } 
 
-// función para agregar productos al carrito
-
-function comprar_producto(id){
-    let producto = productos.find(p => p.id == id);
-    carrito.push(producto);
-    let carrito_storage = JSON.stringify(carrito)
-    localStorage.setItem('carrito',carrito_storage);
-    mostrar_carrito();
-} 
-
-// función para mostrar el carrito
-
-function mostrar_carrito(){
-    if(JSON.parse(localStorage.getItem('carrito')) == null){
-        impri_carr.innerHTML = `<p class="titulo text-center">El carrito está vacío.</p>`;        
-    }else{
-    carrito_storage = JSON.parse(localStorage.getItem('carrito'));
-    impri_carr.innerHTML = ``;
-    let total = 0;
-    for (const producto of carrito_storage) {
-        let li = document.createElement('li');
-            li.innerHTML = `
-            <h3 class="titulo1">Nombre del producto: ${producto.nombre}</h3>
-            <p class="titulo1">el precio es de: $ ${producto.precio}</p>
-            `
-        impri_carr.appendChild(li);
-        total = total + producto.precio;  
-        }
-    let p = document.createElement('p');
-    p.innerHTML = `<p class="titulo">Total: $ ${total}</p>`
-    impri_carr.appendChild(p);
-    }
-}
-
-
-// declaracion de variables
-
-const productos = [];
-
-let carrito = [];
-
-if(JSON.parse(localStorage.getItem('carrito')) == null){
-    carrito = [];
-}else{
-    carrito = JSON.parse(localStorage.getItem('carrito'));
-}
-console.log(carrito);
-
-let bus = productos;
-
-let continuar = 's';
-
-const producto1 = new Producto(1,'remera',1500);
-const producto2 = new Producto(2,'pantalon',3000);
-const producto3 = new Producto(3,'zapatillas',2500);
-const producto4 = new Producto(4,'buzo',2000);
-const producto5 = new Producto(5,'medias',500);
-const producto6 = new Producto(6,'campera',6000);
-const producto7 = new Producto(7,'gorra',1000);
-const producto8 = new Producto(8,'guantes',2000);
-const producto9 = new Producto(9,'camisa',3000);
-
-cargar_producto(productos,producto1);
-cargar_producto(productos,producto2);
-cargar_producto(productos,producto3);
-cargar_producto(productos,producto4);
-cargar_producto(productos,producto5);
-cargar_producto(productos,producto6);
-cargar_producto(productos,producto7);
-cargar_producto(productos,producto8);
-cargar_producto(productos,producto9);
 
 // Buscar productos
 
 const boton_buscar = document.querySelector('#boton_buscar');
 const input = document.getElementById('buscar');
 const impri_prod = document.getElementById("impri_prod");
+const desplegar_carrito = document.getElementById('desplegar_carrito');
+const mostrar_ocultar = document.getElementById('mostrar_ocultar');
 
-// ver productos
 
-boton_buscar.addEventListener('click',()=>{
-    impri_prod.innerHTML = ``
-    bus = filtrar_producto(productos,input.value.toLowerCase());
-    return ver_productos(bus)
+
+desplegar_carrito.addEventListener('click', ()=>{
+    // if(mostrar_ocultar.style.display === 'block'){
+    //     mostrar_ocultar.style.display = 'none';
+    // }else {
+    //     mostrar_ocultar.style.display = 'block';
+    // }
+    mostrar_ocultar.style.display === 'block' ? mostrar_ocultar.style.display = 'none' : mostrar_ocultar.style.display = 'block';
 })
 
 
-ver_productos(bus);
-mostrar_carrito();
 
-
+async function productos_online(){
+    const response = await fetch('./data/data.json');  
+    const productos = await response.json();
     
+    let carrito = [];
+
+    JSON.parse(localStorage.getItem('carrito')) == null ? carrito = [] : carrito = JSON.parse(localStorage.getItem('carrito'));
 
 
+    let bus = productos;
+      
+    // función para agregar productos al carrito
 
+    function comprar_producto(id){
+        const esta_en_carrito = carrito.some(p => p.id == id);
+        if(esta_en_carrito){
+            const p = carrito.map(p =>{
+                if (p.id == id){
+                    p.cantidad++
+                }
+            })         
+        }else{
+        let producto = productos.find(p => p.id == id);
+        producto.cantidad = 1; 
+        carrito.push(producto);
+        }
+        let carrito_storage = JSON.stringify(carrito)
+        localStorage.setItem('carrito',carrito_storage);
+        Swal.fire({
+            position: 'center',
+            icon: 'success',
+            title: 'Su compra se agregó al carrito',
+            showConfirmButton: false,
+            timer: 1500
+        })
+        mostrar_carrito();
 
+    }
+
+    function mostrar_carrito(){
+            if(JSON.parse(localStorage.getItem('carrito')) == null || JSON.parse(localStorage.getItem('carrito')) == ''){
+                impri_carr.innerHTML = `<p class="titulo text-center">El carrito está vacío.</p>`;        
+            }else{
+            carrito_storage = JSON.parse(localStorage.getItem('carrito'));
+            impri_carr.innerHTML = ``;
+            let total = 0;
+            for (const producto of carrito_storage) {
+                let div = document.createElement('div');
+                    div.className = 'prod_carr';
+                    div.innerHTML = `
+                    <p class="formato_prod">Producto: ${producto.nombre}</p>
+                    <p class="formato_prod">Precio: $${producto.precio}</p>
+                    <p class="formato_prod">Cantidad: ${producto.cantidad} un.</p>
+                    <button id="eliminar_producto${producto.id}" class="btn btn-primary" >Eliminar</button>
+                    `
+                impri_carr.appendChild(div);
+                const bot_eliminar = document.getElementById('eliminar_producto'+producto.id);
+                bot_eliminar.addEventListener('click',()=>{
+                eliminar_carrito(producto.id)
+                });
+                total = total + producto.precio * producto.cantidad;  
+                }
+            let p = document.createElement('p');
+            p.innerHTML = `<p class="titulo">Total: $ ${total}</p>`
+            impri_carr.appendChild(p);
+            }
+        }
+        
+    
+    // // Eliminar del carrito
+    // function eliminar_carrito(id){
+    //     const item = carrito.find(p => p.id == id);
+    //     const indice = carrito.indexOf(item);
+    //     carrito.splice(indice,1);
+    //     carrito_storage = JSON.stringify(carrito)
+    //     localStorage.setItem('carrito',carrito_storage);
+    //     mostrar_carrito();
+    // }
+
+    // Eliminar del carrito
+    function eliminar_carrito(id){
+        Swal.fire({
+            title: 'Atención!',
+            text: "Está seguro que desea eliminarlo?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si, estoy seguro!'
+          }).then((result) => {
+            if (result.isConfirmed) {                
+                const item = carrito.find(p => p.id == id);
+                const indice = carrito.indexOf(item);
+                carrito.splice(indice,1);
+                carrito_storage = JSON.stringify(carrito)
+                localStorage.setItem('carrito',carrito_storage);
+                mostrar_carrito();
+                Swal.fire(
+                         'Su producto ha sido eliminado.',
+                        )
+                        }
+                 })    
+        }
+    
+    // función para ver productos
+
+    // function ver_productos(bus){
+    //     console.log(bus);
+    //     for (const producto of bus) {
+    //         let div = document.createElement('div');
+    //         div.className = "col-12 col-md-6 col-xl-3 contenido";
+    //         div.innerHTML =  `
+    //             <img src="${producto.img}" width="180" height="180"  alt="">
+    //             <h3 class="titulo1">${producto.nombre}</h3>
+    //             <p class="titulo1">Precio: $ ${producto.precio}</p>
+    //             <button id="comprar_producto${producto.id}" class="boton_compra btn btn-primary" >Comprar</button>
+    //             `
+    //         impri_prod.appendChild(div);
+    //          const bot_compra = document.getElementById('comprar_producto'+producto.id);
+    //         bot_compra.addEventListener('click',()=>{
+    //         comprar_producto(producto.id);
+    //         })
+    //     }
+            
+    // }
+    
+    function ver_productos(bus){
+        console.log(bus);
+        let div = document.createElement('div');
+        div.innerHTML = ``;        
+        if(bus == ''){
+            div = document.createElement('div');
+            div.className = "titulo text-center";
+            div.innerHTML =  `
+                <p class="titulo">No se encontraron productos con esa descripción</p>
+                `
+            impri_prod.appendChild(div);
+        }else{
+        for (const producto of bus) {
+            div = document.createElement('div');
+            div.className = "col-12 col-md-6 col-xl-3 contenido";
+            div.innerHTML =  `
+                <img src="${producto.img}" width="180" height="180"  alt="">
+                <h3 class="titulo1">${producto.nombre}</h3>
+                <p class="titulo1">Precio: $ ${producto.precio}</p>
+                <button id="comprar_producto${producto.id}" class="boton_compra btn btn-primary" >Comprar</button>
+                `
+            impri_prod.appendChild(div);
+             const bot_compra = document.getElementById('comprar_producto'+producto.id);
+            bot_compra.addEventListener('click',()=>{
+            comprar_producto(producto.id);
+            })
+        }
+    }   
+    }
+    
+    // ver productos
+
+    boton_buscar.addEventListener('click',()=>{
+    impri_prod.innerHTML = ``
+    bus = filtrar_producto(productos,input.value.toLowerCase());
+    return ver_productos(bus);
+    })
+    
+    ver_productos(bus);
+    mostrar_carrito();
+
+  }
+  
+productos_online()
 
