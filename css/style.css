@@ -38,8 +38,6 @@ color: rgb(0, 0, 255);
 font-size: 3rem;
 }
 
-
-
 .formato_prod {
 color: rgba(0, 0, 255, 0.507);
 font-size: 1rem;
@@ -48,12 +46,16 @@ margin-bottom: 0;
 margin-top: 0;
 }
 
+.boton_compra{
+  margin-bottom: 10px;
+}
+
 .carrito{
 position: absolute;
 right: 10%;
 text-align: center;
 display: none;
-background-color: ivory;
+background-color: rgb(253, 253, 192);
 border-radius: 25px;
 }
 
@@ -78,4 +80,14 @@ justify-content: space-between;
 align-items: center;
 padding-right: 150px;
 background-color: aliceblue;
+}
+
+.btn-compra{
+  margin-bottom: 20px;
+}
+
+
+.total {
+  margin: 0;
+  padding: 5px;
 }

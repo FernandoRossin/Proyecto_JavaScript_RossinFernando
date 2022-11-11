@@ -20,12 +20,9 @@ const mostrar_ocultar = document.getElementById('mostrar_ocultar');
 
 
 desplegar_carrito.addEventListener('click', ()=>{
-    // if(mostrar_ocultar.style.display === 'block'){
-    //     mostrar_ocultar.style.display = 'none';
-    // }else {
-    //     mostrar_ocultar.style.display = 'block';
-    // }
+    
     mostrar_ocultar.style.display === 'block' ? mostrar_ocultar.style.display = 'none' : mostrar_ocultar.style.display = 'block';
+
 })
 
 
@@ -37,7 +34,6 @@ async function productos_online(){
     let carrito = [];
 
     JSON.parse(localStorage.getItem('carrito')) == null ? carrito = [] : carrito = JSON.parse(localStorage.getItem('carrito'));
-
 
     let bus = productos;
       
@@ -93,22 +89,34 @@ async function productos_online(){
                 total = total + producto.precio * producto.cantidad;  
                 }
             let p = document.createElement('p');
-            p.innerHTML = `<p class="titulo">Total: $ ${total}</p>`
+            p.innerHTML = `<p class="titulo total">Total: $ ${total}</p>`
             impri_carr.appendChild(p);
+            
+            let div = document.createElement('div')
+            div.innerHTML = `<button type="button" class="btn btn-primary btn-compra" id="realizar_compra">Realizar compra</button>`
+            
+            impri_carr.appendChild(div);
+            
+            const realizar_compra = document.getElementById('realizar_compra');
+            
+            realizar_compra.addEventListener('click',()=>{
+                Swal.fire({
+                    position: 'center',
+                    icon: 'success',
+                    title: 'Compra realizada con éxito',
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+                carrito = [];
+                carrito_storage = JSON.stringify(carrito);
+                localStorage.setItem('carrito',carrito_storage);
+                mostrar_carrito();
+            })
+
             }
         }
         
-    
-    // // Eliminar del carrito
-    // function eliminar_carrito(id){
-    //     const item = carrito.find(p => p.id == id);
-    //     const indice = carrito.indexOf(item);
-    //     carrito.splice(indice,1);
-    //     carrito_storage = JSON.stringify(carrito)
-    //     localStorage.setItem('carrito',carrito_storage);
-    //     mostrar_carrito();
-    // }
-
+   
     // Eliminar del carrito
     function eliminar_carrito(id){
         Swal.fire({
@@ -124,7 +132,7 @@ async function productos_online(){
                 const item = carrito.find(p => p.id == id);
                 const indice = carrito.indexOf(item);
                 carrito.splice(indice,1);
-                carrito_storage = JSON.stringify(carrito)
+                carrito_storage = JSON.stringify(carrito);
                 localStorage.setItem('carrito',carrito_storage);
                 mostrar_carrito();
                 Swal.fire(
@@ -134,30 +142,8 @@ async function productos_online(){
                  })    
         }
     
-    // función para ver productos
-
-    // function ver_productos(bus){
-    //     console.log(bus);
-    //     for (const producto of bus) {
-    //         let div = document.createElement('div');
-    //         div.className = "col-12 col-md-6 col-xl-3 contenido";
-    //         div.innerHTML =  `
-    //             <img src="${producto.img}" width="180" height="180"  alt="">
-    //             <h3 class="titulo1">${producto.nombre}</h3>
-    //             <p class="titulo1">Precio: $ ${producto.precio}</p>
-    //             <button id="comprar_producto${producto.id}" class="boton_compra btn btn-primary" >Comprar</button>
-    //             `
-    //         impri_prod.appendChild(div);
-    //          const bot_compra = document.getElementById('comprar_producto'+producto.id);
-    //         bot_compra.addEventListener('click',()=>{
-    //         comprar_producto(producto.id);
-    //         })
-    //     }
-            
-    // }
     
     function ver_productos(bus){
-        console.log(bus);
         let div = document.createElement('div');
         div.innerHTML = ``;        
         if(bus == ''){
